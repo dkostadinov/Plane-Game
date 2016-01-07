@@ -4,20 +4,24 @@ var planeLeft = 0;
 var step = 5;
 var bulletBottom = 0;
 var bulletLeft = 0;
-var planeWidth = 75;
-var planeHeight = 100;
+var planeWidth = 100;
+var planeHeight = 75;
 var bulletWidth = 32;
 var bulletHeight = 32;
 var bulletSpeed = 20;
 var enemyLeft = 0;
 var enemyStep = 7;
-var screenWidth = window.innerWidth * 8/100;
+var tableWidth = window.innerWidth * 8/100;
 var screenHeight = 950;
+var windowWidth = window.innerWidth;
+var screenWidth = windowWidth - tableWidth;
 var enemyShipWidth = 150;
 var enemyShipHeight = 96;
 var score = document.getElementById('score');
 var scoreCount = 0;
 var NumOfBullets = 100;
+
+
 var move = {
 		north: false,
 		south: false,
@@ -54,15 +58,22 @@ function handleMove(keyCode , state) {
 		break;	
 		
 }
-	
+
+function reset() {
+	var reset = document.getElementById('resetButton');
+	reset.onclick = "window.reload"
+}
+
 	
 }
 window.addEventListener('DOMContentLoaded',function (){
 	var plane = document.getElementById('plane');
 	var enemy = document.getElementById('enemyTarget');
 	var gameTable = document.getElementById('stage');
+
 	
 		document.addEventListener("keydown", function(event){
+			
 			
 		handleMove(event.keyCode,true);
 		
@@ -89,7 +100,7 @@ window.addEventListener('DOMContentLoaded',function (){
 				planeLeft -= step;
 			}
 			
-			if (move.east && planeLeft < window.innerWidth - 100){
+			if (move.east && planeLeft < window.innerWidth - tableWidth - planeWidth ){
 				planeLeft += step;
 			}
 			plane.style.bottom = planeBottom + 'px';
@@ -100,7 +111,7 @@ window.addEventListener('DOMContentLoaded',function (){
 		movePlayer();
 		
 		function moveEnemy() {
-			if(enemyLeft > window.innerWidth - screenWidth - enemyShipWidth) {
+			if(enemyLeft > window.innerWidth - tableWidth - enemyShipWidth) {
 				enemyStep = -enemyStep;
 				
 			}
@@ -118,6 +129,8 @@ window.addEventListener('DOMContentLoaded',function (){
 		 document.addEventListener('keypress', function (e){
 			 handleFire(e.keyCode,true);
 		 }, false)
+		
+		
 		 
 		function shoot() {
 			if(fire.shoot){
@@ -149,6 +162,19 @@ window.addEventListener('DOMContentLoaded',function (){
 			window.requestAnimationFrame(shoot);
 		}
 		shoot();
+		
+		function endGame(){
+			if(NumOfBullets == 0 && scoreCount < 70) {
+				alert('You Lose!');
+				window.location.reload();
+			}
+			else if (NumOfBullets >= 0 && scoreCount >= 70) {
+				alert('You Win!');
+				window.location.reload();
+			}
+			requestAnimationFrame(endGame);
+		}
+		endGame();
 		
 		
 },false)
